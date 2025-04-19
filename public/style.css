@@ -285,6 +285,48 @@ body {
   font-size: 1.1rem;
 }
 
+/* Add to your existing style.css */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6c757d;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+}
+
+.share-btn:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+.share-btn .btn-hover-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.share-btn:hover .btn-hover-effect {
+  transform: translateX(0);
+}
 .phone-hint {
   display: block;
   margin-top: 0.5rem;
