@@ -566,6 +566,47 @@ tr:not(.empty-row):hover {
     padding: 1.5rem;
   }
   
+  .join-notice {
+  background-color: rgba(255, 255, 0, 0.1);
+  border-left: 4px solid #ffcc00;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.join-notice p {
+  margin: 0;
+  color: #ffcc00;
+  font-size: 0.9rem;
+}
+
+.community-links {
+  margin-top: 20px;
+}
+
+.telegram-cta {
+  margin-top: 15px;
+}
+
+.telegram-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0088cc;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.telegram-btn:hover {
+  background-color: #0077b5;
+  transform: translateY(-2px);
+}
   .logo {
     flex-direction: column;
     text-align: center;
