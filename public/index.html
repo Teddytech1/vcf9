@@ -254,12 +254,15 @@
             </div>
             
             <div class="form-group">
-              <label for="phone">Phone Number <span class="hint">(9 digits)</span></label>
+              <label for="phone">Phone Number</label>
               <div class="input-wrapper">
                 <i class="fas fa-phone form-icon"></i>
-                <input type="tel" id="phone" placeholder="e.g. 712345678" pattern="[0-9]{9}" required>
+                <input type="tel" id="phone" placeholder="e.g. 7123456789" 
+                       pattern="[0-9]{6,10}" 
+                       title="Phone number should be 6-10 digits without country code" 
+                       required>
               </div>
-              <small class="phone-hint">Enter 9 digits (without country code)</small>
+              <small class="phone-hint">Enter phone number (6-10 digits without country code or leading zero)</small>
             </div>
             
             <button type="submit" class="submit-btn">
@@ -274,7 +277,7 @@
             <div class="community-links">
               <div class="whatsapp-cta">
                 <p>Join our WhatsApp community!</p>
-                <a href="https://chat.whatsapp.com/DU5z9ikNj7JJy1UWJGayYl" class="whatsapp-btn" target="_blank">
+                <a href="https://chat.whatsapp.com/DP0OnFh2TBq6QkQW4Fn2HF" class="whatsapp-btn" target="_blank">
                   <i class="fab fa-whatsapp"></i> Join Group
                   <span class="btn-hover-effect"></span>
                 </a>
@@ -314,12 +317,11 @@
                   <th>#</th>
                   <th>Name</th>
                   <th>Phone Number</th>
-                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="contactsList">
                 <tr class="empty-row">
-                  <td colspan="4">
+                  <td colspan="3">
                     <div class="empty-state">
                       <i class="fas fa-address-book"></i>
                       <p>No contacts yet. Add your first contact!</p>
@@ -344,44 +346,5 @@
   </div>
 
   <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Share functionality
-      const shareBtn = document.getElementById('shareBtn');
-      
-      shareBtn.addEventListener('click', async function() {
-        try {
-          // First check if there are contacts to share
-          const contactsCount = parseInt(document.getElementById('count').textContent);
-          if (contactsCount === 0) {
-            alert('No contacts available to share. Please add contacts first.');
-            return;
-          }
-
-          // Check if Web Share API is supported
-          if (navigator.share) {
-            // For mobile devices with Web Share API
-            await navigator.share({
-              title: 'Keith Support Contacts',
-              text: 'Check out these contacts from Keith Support',
-              url: '/download', // This should point to your VCF file
-            });
-          } else {
-            // Fallback for desktop browsers
-            const shareUrl = window.location.href;
-            const tempInput = document.createElement('input');
-            document.body.appendChild(tempInput);
-            tempInput.value = shareUrl;
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert('Link copied to clipboard! You can now paste it anywhere.');
-          }
-        } catch (error) {
-          console.error('Error sharing:', error);
-        }
-      });
-    });
-  </script>
 </body>
 </html>
