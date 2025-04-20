@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const contactsList = document.getElementById('contactsList');
   const countSpan = document.getElementById('count');
   const phoneInput = document.getElementById('phone');
+  const shareBtn = document.getElementById('shareBtn');
 
   // Load all contacts on page load
   loadContacts();
-    // Theme switcher functionality
+  
+  // Theme switcher functionality
   const themeToggle = document.getElementById('themeToggle');
   const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
   
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const name = document.getElementById('name').value.trim();
     const countryCode = document.getElementById('countryCode').value;
-    const phone = phoneInput.value.trim();
+    let phone = phoneInput.value.trim();
 
     // Validate all fields
     if (!name || !countryCode || !phone) {
@@ -39,9 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Validate phone number format (exactly 9 digits)
-    if (!/^\d{9}$/.test(phone)) {
-      showAlert('Phone number must be exactly 9 digits (without country code)', 'error');
+    // Process phone number - remove all non-digit characters
+    phone = phone.replace(/\D/g, '');
+    
+    // Remove leading 0 if present (common in many countries)
+    if (phone.startsWith('0')) {
+      phone = phone.substring(1);
+    }
+
+    // Validate phone number length (6-10 digits)
+    if (phone.length < 6 || phone.length > 10) {
+      showAlert('Phone number should be 6-10 digits (without country code or leading zero)', 'error');
       phoneInput.focus();
       return;
     }
@@ -83,6 +93,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Share functionality
+  shareBtn.addEventListener('click', async function() {
+    try {
+      // First check if there are contacts to share
+      const contactsCount = parseInt(countSpan.textContent);
+      if (contactsCount === 0) {
+        showAlert('No contacts available to share. Please add contacts first.', 'error');
+        return;
+      }
+
+      // Check if Web Share API is supported
+      if (navigator.share) {
+        // For mobile devices with Web Share API
+        await navigator.share({
+          title: 'Keith Support Contacts',
+          text: 'Check out these contacts from Keith Support',
+          url: '/download',
+        });
+      } else {
+        // Fallback for desktop browsers
+        const shareUrl = window.location.origin + '/download';
+        await navigator.clipboard.writeText(shareUrl);
+        showAlert('Download link copied to clipboard!', 'success');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      if (error.name !== 'AbortError') {
+        showAlert('Error sharing contacts. Please try again.', 'error');
+      }
+    }
+  });
+
   // Load contacts function
   async function loadContacts() {
     try {
@@ -100,7 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (contacts.length === 0) {
         const emptyRow = document.createElement('tr');
         emptyRow.className = 'empty-row';
-        emptyRow.innerHTML = `<td colspan="3">No contacts yet. Add your first contact!</td>`;
+        emptyRow.innerHTML = `
+          <td colspan="4">
+            <div class="empty-state">
+              <i class="fas fa-address-book"></i>
+              <p>No contacts yet. Add your first contact!</p>
+            </div>
+          </td>`;
         contactsList.appendChild(emptyRow);
         return;
       }
@@ -111,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${index + 1}</td>
           <td>${contact.name}</td>
           <td>${contact.country_code}${contact.phone}</td>
-        `;
+          <td></td>`;
         contactsList.appendChild(row);
       });
     } catch (error) {
@@ -149,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => alert.remove(), 300);
     });
   }
+  
   // Prevent non-numeric input in phone field
   phoneInput.addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
