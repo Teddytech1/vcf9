@@ -27,9 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.post('/upload', (req, res) => {
   const { name, phone, country_code } = req.body;
   
-  // Validate phone number (exactly 9 digits)
-  if (!/^\d{9}$/.test(phone)) {
-    return res.status(400).json({ error: 'Phone number must be exactly 9 digits' });
+  // Validate phone number (6-10 digits)
+  if (!/^\d{6,10}$/.test(phone)) {
+    return res.status(400).json({ error: 'Phone number must be 6-10 digits (without country code or leading zero)' });
   }
 
   db.run(
